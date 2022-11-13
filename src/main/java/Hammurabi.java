@@ -37,12 +37,13 @@ CALCULATE in methods
 - int newCostOfLand()
   - is random number 17-23 bushelsPerAcre, return new cost
       - How much land costs (for deciding what to do next). -> int costPerAcre
+- Method finalSummary for gameEnding; how good of a job they did, total number of people starved, how many acres per person
+
 
 Need to complete:
 
- - REMEMBER playGame = 10 years
-- Method printSummary for each year
-- Method finalSummary for gameEnding; how could job they did, total number of people starved, how many acres per person
+- REMEMBER playGame = 10 years
+
 */
 
 public class Hammurabi {
@@ -54,7 +55,7 @@ public class Hammurabi {
 	int peasants = 100;
 	int starvationDeaths = 0;
 	boolean over = true;
-	boolean plague = false;
+	//boolean plague = false;
 	int plagueDeaths = 0;
 	int immigrants = 5;
 	int bushelPerAcreOfHarvest = 0;
@@ -65,37 +66,29 @@ public class Hammurabi {
 	boolean uprising = true;
 
 	public static void main(String[] args) {
-		System.out.println("O great Joanni!");
+		System.out.println("O great lord, Hammurabi!");
 		System.out.println("Let us see how smart or stupid of a ruler you are.");
 		System.out.println("Under previous ruler no people died, and 5 new people entered the kingdom.");
 		System.out.println("You now have 100 peasants to rule and control.");
 		System.out.println("You have been blessed with 3000 bushels and 1000 acres getting 3 bushels from every acre.");
 		System.out.println("Plague ridden rats have eaten and destroyed 200 bushels of food, leaving 2800 bushels in storage.");
 		System.out.println("Your land is currently trading for 19 bushels per acre.");
-		System.out.println("Rule well and do not fork it up or else.");
+		System.out.println("Rule well and do not fork it up or else...");
 		new Hammurabi().playGame();
 	}
 
 	void playGame() {
-		// declare local variables here: grain, population, etc.
-//		boolean over = true;
-//		boolean plague = false;
-//		int plagueDeaths = 0;
-//		int immigrants = 5;
-//		int bushelPerAcreOfHarvest = 0;
-//		boolean rats = false;
-//		int grainEatenByRats = 0;
-//		int costPerAcre = 0;
-//		int year = 0;
-//		boolean uprising = true;
-
-
-//		int newCostOfLand= 19;
-//		int acresToBuyOrSell =0;
-//		int bushelToFeed =0;
-//		int acresToPlantSeed =0;
-		// statements go after the declarations
-
+//		askHowManyAcresToBuy(17,2800);
+//		askHowManyAcresToSell(1000);
+//		askHowMuchGrainToFeedPeople(2800);
+//		askHowManyAcresToPlant(1000,100, 2800);
+//		for (int i = 1; i <= 10 ; i++) {
+//			if (over() == true) {
+//				break;
+//			} else if (uprising(peasants, starvationDeaths) == true) {
+//				break;
+//			}
+//		}
 	}
 
 	//other methods go here
@@ -137,7 +130,7 @@ public class Hammurabi {
 		if (acresToPlant > acresOwned) {
 			System.out.println("O Great Joanni, surely you suck! We have only " + acresOwned + " acres!");
 		}
-		if (acresToPlant > (population / 10)) {
+		if (acresToPlant > (population * 10)) {
 			System.out.println("O Great Joanni, surely you suck! We have only " + population + " peasants!");
 		}
 		if (acresToPlant > bushel) {
@@ -175,7 +168,7 @@ public class Hammurabi {
 
 	public boolean uprising(int population, int numberOfPeopleStarved) {
 		if (population * .45 <= numberOfPeopleStarved) {
-			return true; // need game to be over if true
+			return true;// need game to be over if true
 		} else {
 			return false;
 		}
@@ -214,11 +207,32 @@ public class Hammurabi {
 		return (rand.nextInt(7) + 17);
 	}
 
-	public boolean over() {
-		return false;
+	public int howManyAcresPerPerson() {
+		return currentAcres / peasants;
 	}
-
-
-
-
+	public void printFinalSummary() {
+		System.out.println("This is your final report: ");
+		System.out.println("In your 10 year term of office");
+		System.out.println("You have " + peasants + "peasants");
+		System.out.println("You only starved " + starvationDeaths + " people");
+		System.out.println("You now have " + howManyAcresPerPerson() + " acres per person");
+	}
+	public void printYearlySummary() {
+		System.out.println("I beg to report to you: ");
+		System.out.println("In year " + year + ", " + starvationDeaths + " people starved");
+		System.out.println(immigrants + "peasants came to the city");
+		System.out.println("The city population is now " + peasants);
+		System.out.println("The city now owns " + currentAcres + " acres");
+		System.out.println("You harvested " + bushelPerAcreOfHarvest + " bushels per acre");
+		System.out.println("Rats ate  " + grainEatenByRats + " bushels");
+		System.out.println("You now have " + bushelsInStorage + " bushels in store");
+		System.out.println("Land is trading at " + costPerAcre + " bushels per acre");
+	}
+	public boolean over() {
+		if (year == 10) {
+			return over;
+		} else {
+			return false;
+		}
+	}
 }
