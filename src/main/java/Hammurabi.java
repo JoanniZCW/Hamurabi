@@ -26,74 +26,73 @@ public class Hammurabi {
         int starvationDeaths = 0;
         int plagueDeaths = 0;
         int immigrants = 5;
-        boolean over = true;
         int bushelPerAcreOfHarvest = 0;
-        boolean rats = false;
-        int grainEatenByRats = 0;
-        int costPerAcre = 0;
+//        boolean rats = false;
+        int grainEatenByRats = 200;
+        int costPerAcre = 19;
         int year = 1;
-        boolean uprising = true;
         while (year <= 10) {
-//            printYearlySummary(year, starvationDeaths, immigrants, peasants, currentAcres, bushelPerAcreOfHarvest,
-//                    grainEatenByRats, bushelsInStorage, costPerAcre);
-//            askHowManyAcresToBuy(costPerAcre, bushelsInStorage);
-//            askHowManyAcresToSell(currentAcres);
-//            askHowMuchGrainToFeedPeople(bushelsInStorage);
-//            askHowManyAcresToPlant(currentAcres, peasants, bushelsInStorage);
-//            System.out.println("gets the ask inputs from user");
-
             int acresBought = askHowManyAcresToBuy(costPerAcre, bushelsInStorage);
             currentAcres = currentAcres + acresBought;
-            System.out.println("this updates current acres by bought");
+            bushelsInStorage = bushelsInStorage - (acresBought * costPerAcre);
+            System.out.println("Bushels remaining in storage: " + bushelsInStorage);
+//            System.out.println("this updates current acres by bought");
 
             int acresSold = askHowManyAcresToSell(currentAcres);
             currentAcres = currentAcres - acresSold;
-            System.out.println("this updates current acres by sold");
+            bushelsInStorage = bushelsInStorage + (acresSold * costPerAcre);
+            System.out.println("Bushels remaining in storage: " + bushelsInStorage);
+//            System.out.println("this updates current acres by sold");
 
             int foodToProvidePeasants = askHowMuchGrainToFeedPeople(bushelsInStorage);
             bushelsInStorage = bushelsInStorage - foodToProvidePeasants;
-            System.out.println("this updates current bushels in storage after food given to pop");
+            System.out.println("Bushels remaining in storage: " + bushelsInStorage);
+//            System.out.println("this updates current bushels in storage after food given to pop");
 
             int howMuchToPlant = askHowManyAcresToPlant(currentAcres, peasants, bushelsInStorage);
             bushelsInStorage = bushelsInStorage - (howMuchToPlant * 2);
-            System.out.println("this updates bushel storage after hwo much is planted");
+//            System.out.println("this updates bushel storage after hwo much is planted");
 
             starvationDeaths = starvationDeaths(peasants, foodToProvidePeasants);
             peasants = peasants - starvationDeaths;
-            System.out.println("this updates peasant pop by starvation deaths");
+//            System.out.println("this updates peasant pop by starvation deaths");
 
             bushelPerAcreOfHarvest = harvest();
 
             int totalHarvest = totalHarvest(bushelPerAcreOfHarvest, howMuchToPlant);
             bushelsInStorage = bushelsInStorage + totalHarvest;
-            System.out.println("this updates bushels storage by total harvested");
+//            System.out.println("this updates bushels storage by total harvested");
 
             costPerAcre = newCostOfLand();
-            System.out.println("renews land cost for next yr");
+//            System.out.println("renews land cost for next yr");
 
             plagueDeaths = plagueDeaths(peasants);
             peasants = peasants - plagueDeaths;
-            System.out.println("updates peasant pop by plague deaths");
+//            System.out.println("updates peasant pop by plague deaths");
 
-            grainEatenByRats = (grainEatenByRats(bushelsInStorage) / 100) * bushelsInStorage;
+            grainEatenByRats = grainEatenByRats(bushelsInStorage);
             bushelsInStorage = bushelsInStorage - grainEatenByRats;
-            System.out.println("updates bushels storage by grain eaten by rats");
+//            System.out.println("updates bushels storage by grain eaten by rats");
 
             immigrants = immigrants(peasants, currentAcres, bushelsInStorage, starvationDeaths);
             peasants = peasants + immigrants;
-            System.out.println("this updates peasant pop by new immigration");
+//            System.out.println("this updates peasant pop by new immigration");
 
-            printYearlySummary(year, starvationDeaths, immigrants, peasants, currentAcres, bushelPerAcreOfHarvest, grainEatenByRats, bushelsInStorage, costPerAcre);
-            System.out.println("printed yr report");
+            if (uprising(peasants,starvationDeaths)) {
+                System.out.println("There has been an uprising. You've killed over 45% of people");
+                System.exit(0);
+            }
+            System.out.println("this ends game if uprising from starving");
+            if (year == 10) {
+                System.exit(0);
+            }
+//            System.out.println("this ends game once reached 10 yrs of rule");
+
+            printYearlySummary(year, starvationDeaths, plagueDeaths, immigrants, peasants, currentAcres, bushelPerAcreOfHarvest,
+                    grainEatenByRats, bushelsInStorage, costPerAcre);
+//            System.out.println("printed yr report");
             year++;
-            System.out.println("increased yr by 1");
-//            if (uprising) {
-//                System.out.println("There has been an uprising. You've killed over 45% of people");
-//                System.exit(0);
-//            }
-//            else if (year == 10) {
-//                System.exit(0);
-//            }
+//            System.out.println("increased yr by 1");
         }
     }
 
@@ -103,7 +102,7 @@ public class Hammurabi {
         int acresToBuy = scanner.nextInt();
         if ((acresToBuy * price) > bushel) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + bushel + " bushels left!");
-        } else {
+            return askHowManyAcresToBuy(price, bushel);
         }
         return acresToBuy;
     }
@@ -111,8 +110,9 @@ public class Hammurabi {
     public int askHowManyAcresToSell(int acresOwned) {
         System.out.println("How many acres do you wish to sell?");
         int acresToSell = scanner.nextInt();
-        if ((acresOwned < acresToSell)) {
+        if (acresOwned < acresToSell) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + acresToSell + " acres!");
+            return askHowManyAcresToSell(acresOwned);
         }
         return acresToSell;
     }
@@ -122,6 +122,7 @@ public class Hammurabi {
         int grainToFeedPeople = scanner.nextInt();
         if (bushel < grainToFeedPeople) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + bushel + " people!");
+            return askHowMuchGrainToFeedPeople(bushel);
         }
         return grainToFeedPeople;
     }
@@ -131,12 +132,15 @@ public class Hammurabi {
         int acresToPlant = scanner.nextInt();
         if (acresToPlant > acresOwned) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + acresOwned + " acres!");
+            return askHowManyAcresToPlant(acresOwned, population, bushel);
         }
         if (acresToPlant > (population * 10)) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + population + " peasants!");
+            return askHowManyAcresToPlant(acresOwned, population, bushel);
         }
         if (acresToPlant > bushel) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + bushel + " bushels!");
+            return askHowManyAcresToPlant(acresOwned, population, bushel);
         }
         return acresToPlant;
     }
@@ -169,7 +173,7 @@ public class Hammurabi {
     }
 
     public boolean uprising(int population, int numberOfPeopleStarved) {
-        if (population * .45 <= numberOfPeopleStarved) {
+        if ((population * .45) <= numberOfPeopleStarved) {
             return true;// need game to be over if true
         } else {
             return false;
@@ -194,33 +198,33 @@ public class Hammurabi {
         return totHarv;
     }
 
-    public boolean rats() {
-        int roll = rand.nextInt(100);
-        if (roll < 40) {
-            return true;
-        }
-        return false;
-    }
+//    public boolean rats() {
+//        int roll = rand.nextInt(100);
+//        if (roll < 40) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public int grainEatenByRats(int bushels) {
         int percentage = rand.nextInt(21) + 10;
-        if (rats() == false) {
-            return 0;
+        if (rand.nextInt(100) < 40) {
+            return (percentage * bushels) / 100;
         }
-        return percentage;
+        return 0;
     }
 
     public int newCostOfLand() {
         return (rand.nextInt(7) + 17);
     }
 
-    public int acresBought(int bushelsInStorage, int acresToBuy, int costPerAcre) {
-        int countAcresBought = 0;
-        if (bushelsInStorage >= acresToBuy * costPerAcre) {
-            countAcresBought = askHowManyAcresToBuy(costPerAcre, bushelsInStorage);
-        }
-        return countAcresBought;
-    }
+//    public int acresBought(int bushelsInStorage, int acresToBuy, int costPerAcre) {
+//        int countAcresBought = 0;
+//        if (bushelsInStorage >= acresToBuy * costPerAcre) {
+//            countAcresBought = askHowManyAcresToBuy(costPerAcre, bushelsInStorage);
+//        }
+//        return countAcresBought;
+//    }
 
 
 //	public void printFinalSummary() {
@@ -231,9 +235,11 @@ public class Hammurabi {
 ////		System.out.println("You now have " + howManyAcresPerPerson() + " acres per person");
 //	}
 
-    public void printYearlySummary(int year, int starvationDeaths, int immigrants, int peasants, int currentAcres, int bushelPerAcreOfHarvest, int grainEatenByRats, int bushelsInStorage, int costPerAcre) {
+    public void printYearlySummary(int year, int starvationDeaths, int plagueDeaths, int immigrants, int peasants,
+                                   int currentAcres, int bushelPerAcreOfHarvest, int grainEatenByRats, int bushelsInStorage, int costPerAcre) {
         System.out.println("I beg to report to you: ");
         System.out.println("In year " + year + ", " + starvationDeaths + " people starved");
+        System.out.println(plagueDeaths + " deaths from the plague");
         System.out.println(immigrants + " peasants came to the city");
         System.out.println("The city population is now " + peasants);
         System.out.println("The city now owns " + currentAcres + " acres");

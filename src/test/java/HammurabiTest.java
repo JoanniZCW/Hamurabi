@@ -60,11 +60,11 @@ public class HammurabiTest {
         assertFalse("Should not have had an uprising!", ham.uprising(1000, 449));
     }
 
-//    @Test
-//    public final void testImmigrants() {
-//        int imm = ham.immigrants(10, 1200, 500);
-//        assertEquals("Wrong number of immigrants.", 25, imm);
-//    }
+    @Test
+    public final void testImmigrants() {
+        int imm = ham.immigrants(10, 1200, 500, 60);
+        assertEquals("Wrong number of immigrants.", 0, imm);
+    }
 
 //    @Test
 //    public final void testHarvest() {
@@ -121,6 +121,7 @@ public class HammurabiTest {
             assertTrue("You never have a land cost of " + j + " bushels per acre.", cost[j] > 0);
         }
     }
+
 
 }
 
