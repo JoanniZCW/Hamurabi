@@ -102,7 +102,7 @@ public class Hammurabi {
         int acresToBuy = scanner.nextInt();
         if ((acresToBuy * price) > bushel) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + bushel + " bushels left!");
-            return 0;
+            return askHowManyAcresToBuy(price, bushel);
         }
         return acresToBuy;
     }
@@ -112,7 +112,7 @@ public class Hammurabi {
         int acresToSell = scanner.nextInt();
         if (acresOwned < acresToSell) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + acresToSell + " acres!");
-            return 0;
+            return askHowManyAcresToSell(acresOwned);
         }
         return acresToSell;
     }
@@ -122,7 +122,7 @@ public class Hammurabi {
         int grainToFeedPeople = scanner.nextInt();
         if (bushel < grainToFeedPeople) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + bushel + " people!");
-            return 0;
+            return askHowMuchGrainToFeedPeople(bushel);
         }
         return grainToFeedPeople;
     }
@@ -132,15 +132,15 @@ public class Hammurabi {
         int acresToPlant = scanner.nextInt();
         if (acresToPlant > acresOwned) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + acresOwned + " acres!");
-            return 0;
+            return askHowManyAcresToPlant(acresOwned, population, bushel);
         }
         if (acresToPlant > (population * 10)) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + population + " peasants!");
-            return 0;
+            return askHowManyAcresToPlant(acresOwned, population, bushel);
         }
         if (acresToPlant > bushel) {
             System.out.println("O Great Hammurabi, surely you suck! We have only " + bushel + " bushels!");
-            return 0;
+            return askHowManyAcresToPlant(acresOwned, population, bushel);
         }
         return acresToPlant;
     }
