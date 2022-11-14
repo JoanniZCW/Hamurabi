@@ -34,6 +34,20 @@ public class HammurabiTest {
     }
 
     @Test
+    public final void testPlagueDeathsV2() {
+        int number_of_plagues = 0;
+        for (int i = 0; i < 10000; i++) {
+            int deaths = ham.plagueDeaths(1000);
+            if (deaths > 0) {
+                number_of_plagues += 1;
+            }
+        }
+        int percentPlagues = number_of_plagues / 100;
+        assertTrue("Number of plagues is about " + percentPlagues + ", not about 15%.",
+                about(1500, number_of_plagues));
+    }
+
+    @Test
     public final void testPlagueDeaths2() {
         int deaths = 0;
         for (int i = 0; i < 10000; i++) {
@@ -43,11 +57,84 @@ public class HammurabiTest {
         assertEquals("In a plague, " + deaths + "% of your people die, not 50%.",
                      50, deaths);
     }
-    
+
+    @Test
+    public final void testPlagueDeaths3() {
+        int deaths = 0;
+        for (int i = 0; i < 10000; i++) {
+            deaths = ham.plagueDeaths(400);
+            if (deaths > 0) break;
+        }
+        assertEquals("In a plague, " + deaths + "% of your people die, not 50%.",
+                200, deaths);
+    }
+
+    @Test
+    public final void testPlagueDeaths4() {
+        int deaths = 0;
+        for (int i = 0; i < 10000; i++) {
+            deaths = ham.plagueDeaths(50);
+            if (deaths > 0) break;
+        }
+        assertEquals("In a plague, " + deaths + "% of your people die, not 50%.",
+                25, deaths);
+    }
+
+    @Test
+    public final void testPlagueDeaths5() {
+        int deaths = 0;
+        for (int i = 0; i < 10000; i++) {
+            deaths = ham.plagueDeaths(1000);
+            if (deaths > 0) break;
+        }
+        assertEquals("In a plague, " + deaths + "% of your people die, not 50%.",
+                500, deaths);
+    }
+
+    @Test
+    public final void testPlagueDeaths6() {
+        int deaths = 0;
+        for (int i = 0; i < 10000; i++) {
+            deaths = ham.plagueDeaths(10);
+            if (deaths > 0) break;
+        }
+        assertEquals("In a plague, " + deaths + "% of your people die, not 50%.",
+                5, deaths);
+    }
     @Test
     public final void testStarvationDeaths() {
         int deaths = ham.starvationDeaths(100, 1639);
         assertEquals("Wrong number of starvations deaths.", 19, deaths);
+        deaths = ham.starvationDeaths(100, 2500);
+        if (deaths < 0) {
+            fail("You starved a negative number of people!");
+        }
+    }
+
+    @Test
+    public final void testStarvationDeaths2() {
+        int deaths = ham.starvationDeaths(100, 1400);
+        assertEquals("Wrong number of starvations deaths.", 30, deaths);
+        deaths = ham.starvationDeaths(100, 2500);
+        if (deaths < 0) {
+            fail("You starved a negative number of people!");
+        }
+    }
+
+    @Test
+    public final void testStarvationDeaths3() {
+        int deaths = ham.starvationDeaths(130, 1100);
+        assertEquals("Wrong number of starvations deaths.", 75, deaths);
+        deaths = ham.starvationDeaths(100, 2500);
+        if (deaths < 0) {
+            fail("You starved a negative number of people!");
+        }
+    }
+
+    @Test
+    public final void testStarvationDeaths4() {
+        int deaths = ham.starvationDeaths(120, 1190);
+        assertEquals("Wrong number of starvations deaths.", 61, deaths);
         deaths = ham.starvationDeaths(100, 2500);
         if (deaths < 0) {
             fail("You starved a negative number of people!");
@@ -63,6 +150,24 @@ public class HammurabiTest {
     @Test
     public final void testImmigrants() {
         int imm = ham.immigrants(10, 1200, 500, 60);
+        assertEquals("Wrong number of immigrants.", 0, imm);
+    }
+
+    @Test
+    public final void testImmigrants2() {
+        int imm = ham.immigrants(1, 1200, 500, 90);
+        assertEquals("Wrong number of immigrants.", 0, imm);
+    }
+
+    @Test
+    public final void testImmigrants3() {
+        int imm = ham.immigrants(1000, 1200, 200, 600);
+        assertEquals("Wrong number of immigrants.", 0, imm);
+    }
+
+    @Test
+    public final void testImmigrants4() {
+        int imm = ham.immigrants(104, 1200, 900, 80);
         assertEquals("Wrong number of immigrants.", 0, imm);
     }
 
@@ -110,6 +215,38 @@ public class HammurabiTest {
     }
 
     @Test
+    public final void testGrainEatenByRats3() {
+        int percent = 0;
+        int[] counts = new int[400];
+        for (int i = 0; i < 10000; i++) {
+            percent = ham.grainEatenByRats(100);
+            if (percent == 0) continue;
+            counts[percent] += 1;
+            assertTrue("Rats ate " + percent + "% of your grain, not 10% to 30%.",
+                    percent >= 10 && percent <= 30);
+        }
+        for (int j = 11; j < 30; j++) {
+            assertTrue("Rats never ate " + j + "% of your grain.", counts[j] > 0);
+        }
+    }
+
+    @Test
+    public final void testGrainEatenByRats4() {
+        int percent = 0;
+        int[] counts = new int[60];
+        for (int i = 0; i < 10000; i++) {
+            percent = ham.grainEatenByRats(100);
+            if (percent == 0) continue;
+            counts[percent] += 1;
+            assertTrue("Rats ate " + percent + "% of your grain, not 10% to 30%.",
+                    percent >= 10 && percent <= 30);
+        }
+        for (int j = 11; j < 30; j++) {
+            assertTrue("Rats never ate " + j + "% of your grain.", counts[j] > 0);
+        }
+    }
+
+    @Test
     public final void testNewCostOfLand() {
         int[] cost = new int[24];
         for (int i = 0; i < 1000; i++) {
@@ -122,6 +259,31 @@ public class HammurabiTest {
         }
     }
 
+    @Test
+    public final void testNewCostOfLand2() {
+        int[] cost = new int[25];
+        for (int i = 0; i < 1000; i++) {
+            int price = ham.newCostOfLand();
+            assertTrue("Illegal cost of land: " + price, price >= 17 && price <= 23);
+            cost[price] += 1;
+        }
+        for (int j = 17; j <= 23; j++) {
+            assertTrue("You never have a land cost of " + j + " bushels per acre.", cost[j] > 0);
+        }
+    }
+
+    @Test
+    public final void testNewCostOfLand3() {
+        int[] cost = new int[30];
+        for (int i = 0; i < 1000; i++) {
+            int price = ham.newCostOfLand();
+            assertTrue("Illegal cost of land: " + price, price >= 17 && price <= 23);
+            cost[price] += 1;
+        }
+        for (int j = 17; j <= 23; j++) {
+            assertTrue("You never have a land cost of " + j + " bushels per acre.", cost[j] > 0);
+        }
+    }
 
 }
 
