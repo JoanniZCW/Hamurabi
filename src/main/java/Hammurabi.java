@@ -26,82 +26,75 @@ public class Hammurabi {
         int starvationDeaths = 0;
         int plagueDeaths = 0;
         int immigrants = 5;
-        boolean over = true;
         int bushelPerAcreOfHarvest = 0;
-        boolean rats = false;
+//        boolean rats = false;
         int grainEatenByRats = 200;
         int costPerAcre = 19;
         int year = 1;
-        boolean uprising = true;
         while (year <= 10) {
-//            Need:
-//            not let it do negative count of inventory (bushels for buy/sell/feed people/plant)
-//
             int acresBought = askHowManyAcresToBuy(costPerAcre, bushelsInStorage);
             currentAcres = currentAcres + acresBought;
             bushelsInStorage = bushelsInStorage - (acresBought * costPerAcre);
             System.out.println("Bushels remaining in storage: " + bushelsInStorage);
-            System.out.println("this updates current acres by bought");
+//            System.out.println("this updates current acres by bought");
 
             int acresSold = askHowManyAcresToSell(currentAcres);
             currentAcres = currentAcres - acresSold;
             bushelsInStorage = bushelsInStorage + (acresSold * costPerAcre);
             System.out.println("Bushels remaining in storage: " + bushelsInStorage);
-            System.out.println("this updates current acres by sold");
+//            System.out.println("this updates current acres by sold");
 
             int foodToProvidePeasants = askHowMuchGrainToFeedPeople(bushelsInStorage);
             bushelsInStorage = bushelsInStorage - foodToProvidePeasants;
             System.out.println("Bushels remaining in storage: " + bushelsInStorage);
-            System.out.println("this updates current bushels in storage after food given to pop");
+//            System.out.println("this updates current bushels in storage after food given to pop");
 
             int howMuchToPlant = askHowManyAcresToPlant(currentAcres, peasants, bushelsInStorage);
             bushelsInStorage = bushelsInStorage - (howMuchToPlant * 2);
-            System.out.println("this updates bushel storage after hwo much is planted");
+//            System.out.println("this updates bushel storage after hwo much is planted");
 
             starvationDeaths = starvationDeaths(peasants, foodToProvidePeasants);
             peasants = peasants - starvationDeaths;
-            System.out.println("this updates peasant pop by starvation deaths");
+//            System.out.println("this updates peasant pop by starvation deaths");
 
             bushelPerAcreOfHarvest = harvest();
 
             int totalHarvest = totalHarvest(bushelPerAcreOfHarvest, howMuchToPlant);
             bushelsInStorage = bushelsInStorage + totalHarvest;
-            System.out.println("this updates bushels storage by total harvested");
+//            System.out.println("this updates bushels storage by total harvested");
 
             costPerAcre = newCostOfLand();
-            System.out.println("renews land cost for next yr");
+//            System.out.println("renews land cost for next yr");
 
             plagueDeaths = plagueDeaths(peasants);
             peasants = peasants - plagueDeaths;
-            System.out.println("updates peasant pop by plague deaths");
+//            System.out.println("updates peasant pop by plague deaths");
 
             grainEatenByRats = grainEatenByRats(bushelsInStorage);
             bushelsInStorage = bushelsInStorage - grainEatenByRats;
-            System.out.println("updates bushels storage by grain eaten by rats");
+//            System.out.println("updates bushels storage by grain eaten by rats");
 
             immigrants = immigrants(peasants, currentAcres, bushelsInStorage, starvationDeaths);
             peasants = peasants + immigrants;
-            System.out.println("this updates peasant pop by new immigration");
+//            System.out.println("this updates peasant pop by new immigration");
 
 //            if (uprising(peasants,starvationDeaths)) {
 //                System.out.println("There has been an uprising. You've killed over 45% of people");
 //                System.exit(0);
 //            }
-            System.out.println("this ends game if uprising from starving");
+//            System.out.println("this ends game if uprising from starving");
             if (year == 10) {
                 System.exit(0);
             }
-            System.out.println("this ends game once reached 10 yrs of rule");
+//            System.out.println("this ends game once reached 10 yrs of rule");
 
             printYearlySummary(year, starvationDeaths, plagueDeaths, immigrants, peasants, currentAcres, bushelPerAcreOfHarvest,
                     grainEatenByRats, bushelsInStorage, costPerAcre);
-            System.out.println("printed yr report");
+//            System.out.println("printed yr report");
             year++;
-            System.out.println("increased yr by 1");
+//            System.out.println("increased yr by 1");
         }
     }
-
-
 
     //other methods go here
     public int askHowManyAcresToBuy(int price, int bushel) {
