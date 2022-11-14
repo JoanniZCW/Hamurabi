@@ -78,11 +78,11 @@ public class Hammurabi {
             peasants = peasants + immigrants;
 //            System.out.println("this updates peasant pop by new immigration");
 
-//            if (uprising(peasants,starvationDeaths)) {
-//                System.out.println("There has been an uprising. You've killed over 45% of people");
-//                System.exit(0);
-//            }
-//            System.out.println("this ends game if uprising from starving");
+            if (uprising(peasants,starvationDeaths)) {
+                System.out.println("There has been an uprising. You've killed over 45% of people");
+                System.exit(0);
+            }
+            System.out.println("this ends game if uprising from starving");
             if (year == 10) {
                 System.exit(0);
             }
@@ -173,7 +173,7 @@ public class Hammurabi {
     }
 
     public boolean uprising(int population, int numberOfPeopleStarved) {
-        if ((population * 100) / 45 <= numberOfPeopleStarved) {
+        if ((population * .45) <= numberOfPeopleStarved) {
             return true;// need game to be over if true
         } else {
             return false;
